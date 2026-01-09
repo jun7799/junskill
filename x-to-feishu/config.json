@@ -1,0 +1,54 @@
+{
+  "ai_api": {
+    "provider": "zhipu",
+    "base_url": "https://open.bigmodel.cn/api/anthropic",
+    "api_key": "8ce87410917c496abff3e5f7f6b0080e.MYy8fWEJjBq909vl"
+  },
+  "feishu": {
+    "app_id": "cli_a9c593c3f6e15cb6",
+    "app_secret": "NeDneMgPLjFLGtlvHQaQCcOo2FBso0WQ",
+    "base_id": "XGqVbRXijaegF0ssTFCcTQ68nRd",
+    "table_id": "tbl3LsLcGfMhneaZ",
+    "field_names": {
+      "推文主题": "推文主题",
+      "推文链接": "推文链接",
+      "发布时间": "发布时间",
+      "关键词": "关键词",
+      "推文梗概": "推文梗概",
+      "作者": "作者",
+      "点赞数": "点赞数",
+      "评论数": "评论数",
+      "转发量": "转发量",
+      "阅读量": "阅读量"
+    }
+  },
+  "collection": {
+    "default_count": 10,
+    "default_days_ago": 3,
+    "default_min_views": 100,
+    "scroll_delay_min": 2000,
+    "scroll_delay_max": 4000,
+    "max_scrolls": 30
+  },
+  "themes": {
+    "AI": {
+      "keywords": [
+        "gpt",
+        "chatgpt",
+        "claude",
+        "gemini",
+        "ai",
+        "llm",
+        "openai",
+        "anthropic",
+        "artificial intelligence",
+        "machine learning",
+        "deep learning",
+        "midjourney",
+        "cursor",
+        "windsurf"
+      ],
+      "description": "AI人工智能相关"
+    }
+  }
+}

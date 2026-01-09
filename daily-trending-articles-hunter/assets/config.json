@@ -1,0 +1,83 @@
+{
+  "data_sources": {
+    "we_mp_rss": {
+      "enabled": true,
+      "api_url": "http://localhost:8001",
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTc2NzI0MzQwMH0.wji8irIbtp0pA3pwgydw29K6CaT-EZCZ8bj5VH8sA7A",
+      "limit": 50
+    },
+    "hackernews": {
+      "enabled": false,
+      "api_url": "https://hacker-news.firebaseio.com/v0",
+      "top_stories_limit": 30
+    },
+    "devto": {
+      "enabled": false,
+      "api_url": "https://dev.to/api",
+      "top_articles_limit": 20
+    },
+    "juejin": {
+      "enabled": false,
+      "api_url": "https://api.juejin.cn",
+      "category": "backend",
+      "top_articles_limit": 20
+    }
+  },
+  "keywords": {
+    "AI工具": [
+      "Claude",
+      "Gemini",
+      "Trae",
+      "ChatGPT",
+      "AI写作",
+      "AI编程",
+      "Copilot",
+      "Cursor",
+      "MCP",
+      "Skill"
+    ],
+    "网页开发": [
+      "Vercel",
+      "部署",
+      "前端",
+      "React",
+      "Next.js",
+      "Node.js",
+      "CSS",
+      "HTML",
+      "JavaScript",
+      "TypeScript",
+      "Docker"
+    ],
+    "内容创作": [
+      "公众号",
+      "爆文",
+      "写作",
+      "SEO",
+      "内容营销",
+      "标题优化",
+      "流量"
+    ]
+  },
+  "trending": {
+    "min_score": 0,
+    "time_decay_hours": 72,
+    "platform_weights": {
+      "公众号": 1.2,
+      "HackerNews": 1.0,
+      "dev.to": 0.9,
+      "掘金": 1.1
+    }
+  },
+  "feishu": {
+    "app_id": "cli_a9c593c3f6e15cb6",
+    "app_secret": "NeDneMgPLjFLGtlvHQaQCcOo2FBso0WQ",
+    "bitable_app_token": "OA9fbxQgeapqa9skt98czcIpnFg",
+    "table_id": "tblsSjLmqFCC1Aee"
+  },
+  "schedule": {
+    "enabled": true,
+    "cron_expression": "0 9 * * *",
+    "timezone": "Asia/Shanghai"
+  }
+}

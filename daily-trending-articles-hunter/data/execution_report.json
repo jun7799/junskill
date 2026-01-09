@@ -1,0 +1,30 @@
+{
+  "start_time": "2025-12-29T13:30:05.158444",
+  "steps": [
+    {
+      "step": "运行fetch_articles.py",
+      "success": true,
+      "message": "执行成功",
+      "data": {},
+      "time": "2025-12-29T13:30:05.527564"
+    },
+    {
+      "step": "运行calculate_trending.py",
+      "success": true,
+      "message": "执行成功",
+      "data": {},
+      "time": "2025-12-29T13:30:05.594546"
+    },
+    {
+      "step": "运行feishu_client.py",
+      "success": true,
+      "message": "执行成功",
+      "data": {},
+      "time": "2025-12-29T13:30:13.151800"
+    }
+  ],
+  "success": true,
+  "error": null,
+  "end_time": "2025-12-29T13:30:13.151800",
+  "duration_seconds": 7.993356
+}

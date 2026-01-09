@@ -1,0 +1,73 @@
+{
+  "table_name": "每日热门文章",
+  "description": "从多个数据源抓取的技术领域热门文章",
+  "fields": [
+    {
+      "field_name": "标题",
+      "type": "text",
+      "description": "文章标题"
+    },
+    {
+      "field_name": "链接",
+      "type": "url",
+      "description": "文章链接（用作唯一标识）"
+    },
+    {
+      "field_name": "来源",
+      "type": "single_select",
+      "description": "数据来源平台",
+      "options": [
+        {"name": "公众号"},
+        {"name": "HackerNews"},
+        {"name": "dev.to"},
+        {"name": "掘金"}
+      ]
+    },
+    {
+      "field_name": "领域",
+      "type": "multi_select",
+      "description": "文章所属领域",
+      "options": [
+        {"name": "AI工具"},
+        {"name": "网页开发"},
+        {"name": "内容创作"},
+        {"name": "其他"}
+      ]
+    },
+    {
+      "field_name": "发布时间",
+      "type": "date",
+      "description": "文章发布时间"
+    },
+    {
+      "field_name": "阅读量",
+      "type": "number",
+      "description": "文章阅读量（格式：0,00）
+    },
+    {
+      "field_name": "点赞数",
+      "type": "number",
+      "description": "点赞/在看数量"
+    },
+    {
+      "field_name": "评论数",
+      "type": "number",
+      "description": "评论数量"
+    },
+    {
+      "field_name": "热度分数",
+      "type": "number",
+      "description": "综合热度评分（0-100）"
+    },
+    {
+      "field_name": "关键词匹配",
+      "type": "text",
+      "description": "匹配到的关键词"
+    },
+    {
+      "field_name": "抓取时间",
+      "type": "date",
+      "description": "数据抓取时间"
+    }
+  ]
+}

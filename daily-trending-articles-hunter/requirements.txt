@@ -1,0 +1,17 @@
+# 飞书API SDK
+lark-oapi>=1.2.0
+
+# HTTP请求
+requests>=2.31.0
+
+# RSS解析
+feedparser>=6.0.10
+
+# 定时任务
+schedule>=1.2.0
+
+# 时间处理
+python-dateutil>=2.8.2
+
+# 环境变量管理
+python-dotenv>=1.0.0
