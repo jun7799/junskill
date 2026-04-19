@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>社招精英简历 - 演示案例</title>
+    <style>
+        /* ===== 全局重置与基础 ===== */
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blue: oklch(0.45 0.15 260);
+            --blue-light: oklch(0.55 0.15 260);
+            --blue-dark: oklch(0.35 0.15 260);
+            --bg: oklch(0.97 0 0);
+            --bg-card: oklch(1 0 0);
+            --text: oklch(0.2 0 0);
+            --text-secondary: oklch(0.45 0 0);
+            --text-muted: oklch(0.6 0 0);
+            --border: oklch(0.88 0 0);
+            --border-strong: oklch(0.75 0 0);
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Source Han Sans SC', 'Helvetica Neue', 'PingFang SC', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.7;
+            text-wrap: pretty;
+            min-height: 100vh;
+        }
+
+        /* ===== 顶部标题栏 ===== */
+        .page-header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 20px 32px;
+        }
+
+        .page-header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: var(--text);
+        }
+
+        .page-header p {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ===== 主体容器 ===== */
+        .main-wrap {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 24px 48px;
+        }
+
+        /* ===== 模板预览区域 ===== */
+        .template-section {
+            margin-bottom: 48px;
+        }
+
+        .section-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 16px;
+        }
+
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .template-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 20px 16px;
+            transition: border-color 0.15s;
+            cursor: default;
+        }
+
+        .template-card:hover {
+            border-color: var(--border-strong);
+        }
+
+        .template-card.active {
+            border-color: var(--blue);
+            border-width: 2px;
+        }
+
+        .template-card h3 {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .template-card.active h3 {
+            color: var(--blue);
+        }
+
+        .template-card p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        .template-card .tag-active {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--blue);
+            background: oklch(0.95 0.05 260);
+            padding: 2px 8px;
+            margin-top: 10px;
+        }
+
+        /* ===== 简历预览容器 ===== */
+        .resume-preview-wrap {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 0;
+        }
+
+        /* 工具栏 */
+        .toolbar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toolbar-btn {
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: background 0.1s, color 0.1s;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--text);
+            color: var(--bg-card);
+        }
+
+        .toolbar-spacer {
+            flex: 1;
+        }
+
+        .toolbar-label {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* ===== 简历主体（CSS Grid 双栏） ===== */
+        .resume {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            min-height: 600px;
+        }
+
+        /* --- 左栏：联系方式 + 技能 --- */
+        .sidebar {
+            background: oklch(0.96 0.02 260);
+            padding: 32px 20px;
+            border-right: 1px solid var(--border);
+        }
+
+        .sidebar .name {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--blue);
+            margin-bottom: 4px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar .title-role {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 28px;
+        }
+
+        .sidebar-section h4 {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--blue);
+            border-bottom: 2px solid var(--blue);
+            padding-bottom: 6px;
+            margin-bottom: 12px;
+        }
+
+        .contact-list {
+            list-style: none;
+        }
+
+        .contact-list li {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 4px 0;
+            line-height: 1.5;
+        }
+
+        .contact-list li span {
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            font-size: 12px;
+            color: var(--text-secondary);
+            padding: 3px 0;
+        }
+
+        .skill-list li strong {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .skill-bar-wrap {
+            margin-top: 2px;
+            height: 3px;
+            background: oklch(0.9 0 0);
+        }
+
+        .skill-bar {
+            height: 3px;
+            background: var(--blue);
+        }
+
+        .edu-item {
+            margin-bottom: 12px;
+        }
+
+        .edu-item .school {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .edu-item .major {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .edu-item .degree {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        /* --- 右栏：工作经历 + 项目 --- */
+        .content {
+            padding: 32px 28px;
+        }
+
+        .content-section {
+            margin-bottom: 32px;
+        }
+
+        .content-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .content-section h3 {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--blue);
+            border-bottom: 2px solid var(--blue);
+            padding-bottom: 6px;
+            margin-bottom: 16px;
+        }
+
+        /* 工作经历条目 */
+        .job-item {
+            margin-bottom: 24px;
+        }
+
+        .job-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .job-header h4 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .job-header .period {
+            font-size: 12px;
+            color: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        .job-company {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .job-desc {
+            list-style: none;
+        }
+
+        .job-desc li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 2px 0;
+            padding-left: 14px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .job-desc li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 5px;
+            height: 1.5px;
+            background: var(--blue);
+        }
+
+        /* 项目经历条目 */
+        .project-item {
+            margin-bottom: 20px;
+        }
+
+        .project-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 4px;
+        }
+
+        .project-header h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        .project-header .period {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .project-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 6px;
+        }
+
+        .project-desc {
+            list-style: none;
+        }
+
+        .project-desc li {
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 2px 0;
+            padding-left: 14px;
+            position: relative;
+            line-height: 1.7;
+        }
+
+        .project-desc li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 5px;
+            height: 1.5px;
+            background: var(--blue);
+        }
+
+        .project-desc li strong {
+            font-weight: 700;
+            color: var(--text);
+        }
+
+        /* ===== 底部说明 ===== */
+        .footer-note {
+            margin-top: 32px;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .footer-note strong {
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部标题栏 -->
+    <header class="page-header">
+        <h1>社招精英简历 - 演示案例</h1>
+        <p>访谈式简历生成器 / 现代简约模板 / CSS Grid 双栏布局</p>
+    </header>
+
+    <div class="main-wrap">
+
+        <!-- 模板预览区域 -->
+        <section class="template-section">
+            <div class="section-label">选择模板风格</div>
+            <div class="template-grid">
+                <div class="template-card active">
+                    <h3>现代简约</h3>
+                    <p>CSS Grid 双栏布局，蓝灰色调，排版驱动视觉层次，底线分隔章节标题。</p>
+                    <div class="tag-active">当前使用</div>
+                </div>
+                <div class="template-card">
+                    <h3>经典传统</h3>
+                    <p>单栏纵向排列，宋体衬线字体，粗体标题加横线分隔，适合国企及传统行业。</p>
+                </div>
+                <div class="template-card">
+                    <h3>创意设计</h3>
+                    <p>非对称布局，大字号名字，色块分区，适合设计类岗位及创意行业求职。</p>
+                </div>
+                <div class="template-card">
+                    <h3>科技暗黑</h3>
+                    <p>深色背景，荧光强调色，终端风格排版，适合程序员、极客风格个人展示。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 简历预览 -->
+        <div class="resume-preview-wrap">
+            <!-- 工具栏 -->
+            <div class="toolbar">
+                <button class="toolbar-btn" type="button">导出 PDF</button>
+                <button class="toolbar-btn" type="button">导出 Word</button>
+                <button class="toolbar-btn" type="button">复制 Markdown</button>
+                <div class="toolbar-spacer"></div>
+                <span class="toolbar-label">模板：现代简约 / A4 竖版</span>
+            </div>
+
+            <!-- 简历主体 -->
+            <div class="resume">
+                <!-- 左栏 -->
+                <aside class="sidebar">
+                    <div class="name">张三</div>
+                    <div class="title-role">高级前端工程师 | 5年经验</div>
+
+                    <div class="sidebar-section">
+                        <h4>联系方式</h4>
+                        <ul class="contact-list">
+                            <li><span>电话</span> 138xxxx1234</li>
+                            <li><span>邮箱</span> zhangsan@email.com</li>
+                            <li><span>城市</span> 北京</li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h4>专业技能</h4>
+                        <ul class="skill-list">
+                            <li>
+                                <strong>JavaScript / TypeScript</strong>
+                                <div class="skill-bar-wrap"><div class="skill-bar" style="width: 90%"></div></div>
+                            </li>
+                            <li>
+                                <strong>React</strong>
+                                <div class="skill-bar-wrap"><div class="skill-bar" style="width: 90%"></div></div>
+                            </li>
+                            <li>
+                                <strong>Vue</strong>
+                                <div class="skill-bar-wrap"><div class="skill-bar" style="width: 75%"></div></div>
+                            </li>
+                            <li>
+                                <strong>Node.js</strong>
+                                <div class="skill-bar-wrap"><div class="skill-bar" style="width: 70%"></div></div>
+                            </li>
+                            <li>
+                                <strong>Webpack / Vite</strong>
+                                <div class="skill-bar-wrap"><div class="skill-bar" style="width: 80%"></div></div>
+                            </li>
+                            <li>
+                                <strong>CSS / Tailwind</strong>
+                                <div class="skill-bar-wrap"><div class="skill-bar" style="width: 85%"></div></div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h4>教育背景</h4>
+                        <div class="edu-item">
+                            <div class="school">北京邮电大学</div>
+                            <div class="major">计算机科学与技术</div>
+                            <div class="degree">本科 / 2015 - 2019</div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- 右栏 -->
+                <main class="content">
+                    <!-- 工作经历 -->
+                    <section class="content-section">
+                        <h3>工作经历</h3>
+
+                        <div class="job-item">
+                            <div class="job-header">
+                                <h4>高级前端工程师</h4>
+                                <span class="period">2022.03 - 至今</span>
+                            </div>
+                            <div class="job-company">字节跳动 - 抖音电商事业部</div>
+                            <ul class="job-desc">
+                                <li>主导抖音电商C端首页重构，将首屏加载时间从3.2s优化至1.1s，性能提升65%</li>
+                                <li>搭建前端性能监控体系，覆盖率达95%，累计提前发现并解决23个线上性能问题</li>
+                                <li>推动团队 React 18 升级并落地 Concurrent Features，页面交互响应速度提升40%</li>
+                                <li>担任前端技术负责人，指导3名初中级工程师，制定代码规范与CR流程</li>
+                            </ul>
+                        </div>
+
+                        <div class="job-item">
+                            <div class="job-header">
+                                <h4>前端工程师</h4>
+                                <span class="period">2019.07 - 2022.02</span>
+                            </div>
+                            <div class="job-company">美团 - 到店事业群</div>
+                            <ul class="job-desc">
+                                <li>负责商家活动配置平台前端开发，支撑日均10万+活动页面的创建与发布</li>
+                                <li>基于 Vue 3 + TypeScript 重构商家后台系统，代码量减少35%，维护效率显著提升</li>
+                                <li>开发通用低代码组件库，包含40+业务组件，被5个业务团队采纳使用</li>
+                            </ul>
+                        </div>
+                    </section>
+
+                    <!-- 项目经历 -->
+                    <section class="content-section">
+                        <h3>项目经历</h3>
+
+                        <div class="project-item">
+                            <div class="project-header">
+                                <h4>抖音电商首页重构</h4>
+                                <span class="period">2022.06 - 2022.12</span>
+                            </div>
+                            <div class="project-role">前端负责人 / 核心开发</div>
+                            <ul class="project-desc">
+                                <li>将 jQuery + SSR 旧架构迁移至 <strong>React 18 + Next.js</strong>，实现首屏秒开</li>
+                                <li>引入 <strong>关键路径CSS内联 + 图片懒加载 + 代码分割</strong>，Lighthouse 评分从 52 提升至 94</li>
+                                <li>设计并实现 A/B 实验框架，支撑产品侧每周20+组对比实验的数据回收</li>
+                            </ul>
+                        </div>
+
+                        <div class="project-item">
+                            <div class="project-header">
+                                <h4>商家活动配置平台</h4>
+                                <span class="period">2020.03 - 2021.08</span>
+                            </div>
+                            <div class="project-role">前端核心开发</div>
+                            <ul class="project-desc">
+                                <li>基于 <strong>Vue 3 + TypeScript + Pinia</strong> 构建，支持拖拽式活动页面搭建</li>
+                                <li>实现可视化编辑器引擎，支持组件嵌套、样式实时预览、一键发布全流程</li>
+                                <li>设计组件沙箱渲染方案，隔离活动页样式冲突，线上故障率降低 <strong>80%</strong></li>
+                            </ul>
+                        </div>
+                    </section>
+                </main>
+            </div>
+        </div>
+
+        <!-- 底部说明 -->
+        <div class="footer-note">
+            <strong>说明：</strong>本页面为访谈式简历生成器的社招简历演示案例，采用「现代简约」模板风格渲染。
+            简历数据由访谈对话自动提取生成，支持一键导出 PDF / Word / Markdown 格式。
+            模板风格可在生成后自由切换，布局与配色均通过 CSS 变量控制，便于自定义调整。
+        </div>
+
+    </div>
+
+</body>
+</html>

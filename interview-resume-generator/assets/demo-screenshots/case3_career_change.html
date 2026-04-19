@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>转行求职简历 - 演示案例</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@100;300;400;500;700;900&display=swap');
+
+        :root {
+            --coral: oklch(0.55 0.18 25);
+            --coral-light: oklch(0.92 0.06 25);
+            --coral-dark: oklch(0.35 0.15 25);
+            --ink: oklch(0.15 0.02 260);
+            --ink-mid: oklch(0.35 0.02 260);
+            --ink-light: oklch(0.55 0.01 260);
+            --ink-muted: oklch(0.72 0.01 260);
+            --paper: oklch(1 0 0);
+            --rule: oklch(0.88 0.02 25);
+            --surface: oklch(0.97 0.02 25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', 'Source Han Sans SC', 'Helvetica Neue', 'PingFang SC', sans-serif;
+            background: oklch(0.94 0.01 260);
+            color: var(--ink);
+            text-wrap: pretty;
+            min-height: 100vh;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+        }
+
+        /* ========== 顶部标题栏 ========== */
+        .page-header {
+            width: 100%;
+            max-width: 860px;
+            margin-bottom: 32px;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+        }
+
+        .page-header h1 {
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-light);
+        }
+
+        .page-header .tag {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--ink-muted);
+            letter-spacing: 0.04em;
+        }
+
+        /* ========== 简历主体 ========== */
+        .resume {
+            width: 100%;
+            max-width: 860px;
+            background: var(--paper);
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 600px;
+            box-shadow:
+                0 1px 0 oklch(0.85 0.02 25 / 0.5),
+                0 4px 16px oklch(0.5 0.02 260 / 0.08);
+        }
+
+        /* ========== 左栏 ========== */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--rule);
+            padding: 48px 32px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .sidebar .name-block {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .sidebar .name {
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.1;
+            color: var(--ink);
+            letter-spacing: -0.02em;
+        }
+
+        .sidebar .role {
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0.12em;
+            color: var(--coral);
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .sidebar .contact-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .sidebar .contact-list li {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--ink-mid);
+            letter-spacing: 0.02em;
+            line-height: 1.5;
+        }
+
+        .sidebar .contact-label {
+            font-weight: 700;
+            color: var(--ink-light);
+            margin-right: 6px;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+
+        .sidebar .divider {
+            width: 32px;
+            height: 2px;
+            background: var(--coral);
+            border: none;
+        }
+
+        .sidebar .objective-text {
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--ink-mid);
+        }
+
+        /* ========== 右栏 ========== */
+        .main-content {
+            padding: 48px 44px 48px 40px;
+            display: flex;
+            flex-direction: column;
+            gap: 36px;
+        }
+
+        /* section 标题 */
+        .section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-label {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: var(--coral-dark);
+            background: var(--coral-light);
+            padding: 4px 10px 3px;
+            line-height: 1;
+        }
+
+        .section-line {
+            flex: 1;
+            height: 1px;
+            background: var(--rule);
+        }
+
+        /* 核心能力 - 标签式 */
+        .skill-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 16px;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .skill-dot {
+            width: 5px;
+            height: 5px;
+            background: var(--coral);
+            flex-shrink: 0;
+            margin-top: 6px;
+        }
+
+        .skill-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .skill-desc {
+            font-size: 12px;
+            font-weight: 300;
+            color: var(--ink-light);
+            margin-left: 2px;
+        }
+
+        /* 转型准备 */
+        .prep-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .prep-item {
+            display: grid;
+            grid-template-columns: 6px 1fr;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .prep-bar {
+            width: 6px;
+            height: 100%;
+            min-height: 40px;
+            background: var(--coral);
+        }
+
+        .prep-body h4 {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .prep-body p {
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.7;
+            color: var(--ink-mid);
+        }
+
+        /* 经历 */
+        .exp-block {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .exp-item {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px;
+        }
+
+        .exp-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .exp-title {
+            font-size: 15px;
+            font-weight: 900;
+            color: var(--ink);
+            line-height: 1.3;
+        }
+
+        .exp-org {
+            font-size: 12px;
+            font-weight: 300;
+            color: var(--ink-muted);
+            letter-spacing: 0.02em;
+        }
+
+        .exp-desc {
+            font-size: 13px;
+            font-weight: 300;
+            line-height: 1.8;
+            color: var(--ink-mid);
+        }
+
+        .exp-desc strong {
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        /* 教育 */
+        .edu-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .edu-school {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .edu-detail {
+            font-size: 13px;
+            font-weight: 300;
+            color: var(--ink-mid);
+        }
+
+        .edu-year {
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--ink-muted);
+        }
+
+        /* 证书 */
+        .cert-list {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .cert-item {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--ink-mid);
+            padding: 6px 0;
+            border-bottom: 1px solid var(--rule);
+        }
+
+        /* ========== 响应式 ========== */
+        @media (max-width: 700px) {
+            .resume {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                border-right: none;
+                border-bottom: 1px solid var(--rule);
+                padding: 32px 24px;
+            }
+
+            .main-content {
+                padding: 32px 24px;
+            }
+
+            .sidebar .name {
+                font-size: 36px;
+            }
+
+            .exp-item {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="page-header">
+        <h1>转行求职简历 - 演示案例</h1>
+        <span class="tag">creative template</span>
+    </header>
+
+    <main class="resume">
+        <!-- ===== 左栏：身份区 ===== -->
+        <aside class="sidebar">
+            <div class="name-block">
+                <div class="name">王五</div>
+                <div class="role">产品经理</div>
+                <div class="role" style="color: var(--ink-light); letter-spacing: 0.08em;">互联网行业转型</div>
+            </div>
+
+            <hr class="divider">
+
+            <ul class="contact-list">
+                <li><span class="contact-label">Tel</span>136xxxx9012</li>
+                <li><span class="contact-label">Mail</span>wangwu@email.com</li>
+                <li><span class="contact-label">City</span>上海</li>
+            </ul>
+
+            <hr class="divider">
+
+            <div>
+                <div class="section-label" style="margin-bottom: 12px;">职业目标</div>
+                <p class="objective-text">
+                    5年传统行业项目管理经验，已完成互联网产品经理系统学习与实战训练。
+                    擅长将线下业务理解转化为线上产品方案，寻求产品经理岗位，聚焦效率工具与B端方向。
+                </p>
+            </div>
+        </aside>
+
+        <!-- ===== 右栏：内容区 ===== -->
+        <div class="main-content">
+
+            <!-- 核心能力 -->
+            <section class="section">
+                <div class="section-head">
+                    <span class="section-label">可迁移技能</span>
+                    <span class="section-line"></span>
+                </div>
+                <div class="skill-grid">
+                    <div class="skill-item">
+                        <span class="skill-dot"></span>
+                        <span class="skill-name">项目管理</span>
+                        <span class="skill-desc">/ 全流程把控</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-dot"></span>
+                        <span class="skill-name">数据分析</span>
+                        <span class="skill-desc">/ 驱动决策</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-dot"></span>
+                        <span class="skill-name">沟通协调</span>
+                        <span class="skill-desc">/ 跨部门推进</span>
+                    </div>
+                    <div class="skill-item">
+                        <span class="skill-dot"></span>
+                        <span class="skill-name">用户洞察</span>
+                        <span class="skill-desc">/ 需求挖掘</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 转型准备 -->
+            <section class="section">
+                <div class="section-head">
+                    <span class="section-label">转型准备</span>
+                    <span class="section-line"></span>
+                </div>
+                <div class="prep-list">
+                    <div class="prep-item">
+                        <div class="prep-bar"></div>
+                        <div class="prep-body">
+                            <h4>产品经理实战训练营</h4>
+                            <p>系统学习需求分析、竞品调研、PRD撰写，完成电商平台改版课程项目，输出完整产品方案。</p>
+                        </div>
+                    </div>
+                    <div class="prep-item">
+                        <div class="prep-bar"></div>
+                        <div class="prep-body">
+                            <h4>工具自学 / Axure + Figma</h4>
+                            <p>独立完成高保真原型设计，掌握组件库搭建与交互规范，具备与设计团队协作的沟通基础。</p>
+                        </div>
+                    </div>
+                    <div class="prep-item">
+                        <div class="prep-bar"></div>
+                        <div class="prep-body">
+                            <h4>实践项目 / 效率工具小程序</h4>
+                            <p>从需求发现到原型设计到开发对接，独立负责一款团队协作效率工具的完整产品周期。</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 相关经历 -->
+            <section class="section">
+                <div class="section-head">
+                    <span class="section-label">相关经历</span>
+                    <span class="section-line"></span>
+                </div>
+                <div class="exp-block">
+                    <div class="exp-item">
+                        <div class="exp-meta">
+                            <div class="exp-title">效率工具小程序</div>
+                            <div class="exp-org">独立开发者</div>
+                        </div>
+                        <div class="exp-desc">
+                            从0到1负责产品定义、用户调研与原型设计，服务团队内部20+用户日常协作。
+                            <strong>核心成果：</strong>将团队周报收集流程从2小时缩短至30分钟，形成可复用的效率工具产品方案。
+                        </div>
+                    </div>
+                    <div class="exp-item">
+                        <div class="exp-meta">
+                            <div class="exp-title">产品经理社群</div>
+                            <div class="exp-org">运营负责人</div>
+                        </div>
+                        <div class="exp-desc">
+                            组建300人产品经理交流社群，策划 weekly 话题讨论与案例拆解活动。
+                            <strong>核心成果：</strong>社群活跃度保持在60%以上，沉淀原创内容50余篇。
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 原行业经历 -->
+            <section class="section">
+                <div class="section-head">
+                    <span class="section-label">原行业经历</span>
+                    <span class="section-line"></span>
+                </div>
+                <div class="exp-block">
+                    <div class="exp-item">
+                        <div class="exp-meta">
+                            <div class="exp-title">区域运营经理</div>
+                            <div class="exp-org">某知名零售企业</div>
+                        </div>
+                        <div class="exp-desc">
+                            负责华东区域8家门店运营管理，主导季度促销方案策划与执行，统筹跨部门资源推动项目落地。
+                            <strong>核心成果：</strong>年度区域营收增长18%，优化供应链流程节省成本12%。
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 教育背景 -->
+            <section class="section">
+                <div class="section-head">
+                    <span class="section-label">教育背景</span>
+                    <span class="section-line"></span>
+                </div>
+                <div class="edu-row">
+                    <div>
+                        <span class="edu-school">华东师范大学</span>
+                        <span class="edu-detail"> / 工商管理 / 本科</span>
+                    </div>
+                    <span class="edu-year">2014 - 2018</span>
+                </div>
+            </section>
+
+            <!-- 技能证书 -->
+            <section class="section">
+                <div class="section-head">
+                    <span class="section-label">技能证书</span>
+                    <span class="section-line"></span>
+                </div>
+                <div class="cert-list">
+                    <div class="cert-item">PMP 项目管理专业人士认证</div>
+                    <div class="cert-item">产品经理实战证书</div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+</body>
+</html>

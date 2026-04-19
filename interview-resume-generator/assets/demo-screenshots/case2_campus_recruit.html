@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>校招应届简历 - 演示案例</title>
+    <style>
+        /* === Reset === */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* === Design Tokens (oklch) === */
+        :root {
+            --color-primary: oklch(0.3 0.08 250);
+            --color-text: oklch(0.2 0.01 60);
+            --color-bg: oklch(0.98 0.005 80);
+            --color-muted: oklch(0.45 0.02 60);
+            --color-rule: oklch(0.78 0.02 250);
+            --color-subtle: oklch(0.55 0.03 250);
+            --color-accent: oklch(0.35 0.1 250);
+        }
+
+        body {
+            font-family: "Noto Serif SC", Georgia, "Times New Roman", serif;
+            background-color: oklch(0.94 0.01 250);
+            color: var(--color-text);
+            line-height: 1.8;
+            text-wrap: pretty;
+            font-size: 14.5px;
+            padding: 32px 16px;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* === Page Top Bar === */
+        .page-bar {
+            max-width: 700px;
+            margin: 0 auto 28px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            padding: 0 4px;
+        }
+
+        .page-bar-title {
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: var(--color-muted);
+        }
+
+        .page-bar-divider {
+            flex: 1;
+            height: 1px;
+            background-color: var(--color-rule);
+            align-self: center;
+        }
+
+        .page-bar-badge {
+            font-size: 11px;
+            color: var(--color-subtle);
+            letter-spacing: 0.06em;
+            border: 1px solid var(--color-rule);
+            padding: 2px 10px;
+        }
+
+        /* === Resume Paper === */
+        .resume {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: var(--color-bg);
+            padding: 52px 56px 48px;
+            box-shadow: 0 1px 3px oklch(0.7 0.02 250 / 0.18),
+                        0 6px 24px oklch(0.6 0.02 250 / 0.08);
+        }
+
+        /* === Name === */
+        .resume-name {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            color: var(--color-primary);
+            margin-bottom: 6px;
+        }
+
+        /* === Target Role === */
+        .resume-target {
+            text-align: center;
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--color-muted);
+            letter-spacing: 0.06em;
+            margin-bottom: 8px;
+        }
+
+        /* === Contact === */
+        .resume-contact {
+            text-align: center;
+            font-size: 12.5px;
+            color: var(--color-subtle);
+            letter-spacing: 0.02em;
+            margin-bottom: 28px;
+        }
+
+        .resume-contact span + span::before {
+            content: " | ";
+            color: var(--color-rule);
+        }
+
+        /* === Section === */
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section-head {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .section-title {
+            font-size: 14.5px;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            color: var(--color-primary);
+            white-space: nowrap;
+        }
+
+        .section-rule {
+            height: 1px;
+            background-color: var(--color-rule);
+            width: 100%;
+        }
+
+        /* === Entry === */
+        .entry {
+            margin-bottom: 18px;
+        }
+
+        .entry:last-child {
+            margin-bottom: 0;
+        }
+
+        .entry-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: baseline;
+            margin-bottom: 2px;
+        }
+
+        .entry-org {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--color-text);
+        }
+
+        .entry-role {
+            font-size: 13.5px;
+            font-weight: 400;
+            color: var(--color-muted);
+            margin-left: 4px;
+        }
+
+        .entry-date {
+            font-size: 12.5px;
+            color: var(--color-subtle);
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .entry-detail {
+            font-size: 13.5px;
+            line-height: 1.85;
+            color: var(--color-text);
+            padding-left: 0;
+            margin-top: 4px;
+        }
+
+        /* === Bullet List === */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bullet-list li {
+            font-size: 13.5px;
+            line-height: 1.85;
+            color: var(--color-text);
+            padding-left: 14px;
+            position: relative;
+        }
+
+        .bullet-list li::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0.72em;
+            width: 4px;
+            height: 4px;
+            background-color: var(--color-primary);
+            border-radius: 0;
+        }
+
+        /* === Education Specific === */
+        .edu-line {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: baseline;
+        }
+
+        .edu-school {
+            font-size: 14.5px;
+            font-weight: 700;
+        }
+
+        .edu-major {
+            font-size: 13.5px;
+            color: var(--color-muted);
+            margin-top: 2px;
+        }
+
+        .edu-metrics {
+            font-size: 12.5px;
+            color: var(--color-subtle);
+            margin-top: 4px;
+        }
+
+        .edu-metrics span + span::before {
+            content: " / ";
+            color: var(--color-rule);
+        }
+
+        /* === Skills === */
+        .skills-group {
+            margin-bottom: 10px;
+        }
+
+        .skills-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .skills-label {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: var(--color-muted);
+            display: inline;
+            margin-right: 6px;
+        }
+
+        .skills-content {
+            font-size: 13.5px;
+            color: var(--color-text);
+            display: inline;
+        }
+
+        /* === Honors === */
+        .honor-item {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 8px;
+            align-items: baseline;
+            font-size: 13.5px;
+            line-height: 2;
+        }
+
+        .honor-name {
+            color: var(--color-text);
+        }
+
+        .honor-time {
+            font-size: 12.5px;
+            color: var(--color-subtle);
+            text-align: right;
+        }
+
+        /* === Campus === */
+        .campus-detail {
+            font-size: 13.5px;
+            color: var(--color-muted);
+            margin-top: 2px;
+        }
+
+        /* === Footer === */
+        .resume-footer {
+            margin-top: 32px;
+            padding-top: 14px;
+            border-top: 1px solid var(--color-rule);
+            text-align: center;
+            font-size: 11px;
+            color: oklch(0.65 0.02 60);
+            letter-spacing: 0.04em;
+        }
+
+        /* === Responsive === */
+        @media (max-width: 740px) {
+            .resume {
+                padding: 36px 28px 32px;
+            }
+
+            .resume-name {
+                font-size: 24px;
+                letter-spacing: 0.16em;
+            }
+
+            .entry-header {
+                grid-template-columns: 1fr;
+            }
+
+            .entry-date {
+                text-align: left;
+            }
+
+            .edu-line {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="page-bar">
+        <span class="page-bar-title">校招应届简历</span>
+        <div class="page-bar-divider"></div>
+        <span class="page-bar-badge">演示案例</span>
+    </div>
+
+    <!-- Resume Paper -->
+    <article class="resume">
+
+        <!-- Name -->
+        <div class="resume-name">李 四</div>
+
+        <!-- Target -->
+        <div class="resume-target">前端开发工程师 &nbsp;|&nbsp; 本科 &nbsp;|&nbsp; 2024年6月毕业</div>
+
+        <!-- Contact -->
+        <div class="resume-contact">
+            <span>139xxxx5678</span>
+            <span>lisi@university.edu.cn</span>
+            <span>北京</span>
+        </div>
+
+        <!-- Education -->
+        <section class="section">
+            <div class="section-head">
+                <span class="section-title">教育背景</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="entry">
+                <div class="edu-line">
+                    <div class="edu-school">北京大学</div>
+                    <div class="entry-date">2020.09 - 2024.06</div>
+                </div>
+                <div class="edu-major">计算机科学与技术 &mdash; 本科</div>
+                <div class="edu-metrics">
+                    <span>GPA 3.8 / 4.0</span>
+                    <span>专业排名前10%</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Internship -->
+        <section class="section">
+            <div class="section-head">
+                <span class="section-title">实习经历</span>
+                <div class="section-rule"></div>
+            </div>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <div>
+                        <span class="entry-org">腾讯</span>
+                        <span class="entry-role">前端开发实习生</span>
+                    </div>
+                    <span class="entry-date">2023.06 - 2023.09</span>
+                </div>
+                <ul class="bullet-list">
+                    <li>参与微信小程序商业化组件库开发，完成 5 个核心业务组件的设计与实现，覆盖 12 个业务线接入使用</li>
+                    <li>主导前端性能优化专项，通过代码分割与懒加载策略将首屏加载时间从 3.2s 降至 1.4s，性能提升 56%</li>
+                    <li>编写组件单元测试 60 余例，测试覆盖率达到 92%，保障组件质量与迭代稳定性</li>
+                </ul>
+            </div>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <div>
+                        <span class="entry-org">字节跳动</span>
+                        <span class="entry-role">前端开发实习生</span>
+                    </div>
+                    <span class="entry-date">2023.12 - 2024.03</span>
+                </div>
+                <ul class="bullet-list">
+                    <li>负责抖音创作者平台数据看板模块开发，使用 Vue 3 + ECharts 实现多维度数据可视化，日活跃用户 5000+</li>
+                    <li>优化表格虚拟滚动方案，支撑 10 万级数据量流畅渲染，滚动帧率稳定在 58fps 以上</li>
+                    <li>与后端协作制定接口规范，推动团队采用 TypeScript 重构核心模块，代码可维护性显著提升</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section class="section">
+            <div class="section-head">
+                <span class="section-title">项目经历</span>
+                <div class="section-rule"></div>
+            </div>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <div>
+                        <span class="entry-org">校园二手交易平台</span>
+                        <span class="entry-role">全栈开发者</span>
+                    </div>
+                    <span class="entry-date">2023.02 - 2023.05</span>
+                </div>
+                <ul class="bullet-list">
+                    <li>独立完成从需求分析、数据库设计到前后端开发的全流程，使用 Vue 3 + Node.js + MySQL 技术栈</li>
+                    <li>实现商品发布、搜索筛选、即时聊天、订单管理四大核心功能，平台注册用户 1200+，月交易量 300+</li>
+                    <li>采用 JWT 鉴权与 Redis 缓存方案，接口平均响应时间控制在 80ms 以内</li>
+                </ul>
+            </div>
+
+            <div class="entry">
+                <div class="entry-header">
+                    <div>
+                        <span class="entry-org">个人博客系统</span>
+                        <span class="entry-role">独立开发</span>
+                    </div>
+                    <span class="entry-date">2022.09 - 2022.12</span>
+                </div>
+                <ul class="bullet-list">
+                    <li>使用 React + Next.js 搭建支持 SSR 的个人博客，实现 Markdown 实时预览、标签分类、全文检索功能</li>
+                    <li>集成 CI/CD 自动化部署流水线，部署至 Vercel 平台，Lighthouse 性能评分 95+</li>
+                    <li>累计发布技术文章 30 余篇，获得 GitHub Star 200+，被多个技术社区推荐收录</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Skills -->
+        <section class="section">
+            <div class="section-head">
+                <span class="section-title">专业技能</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="skills-group">
+                <span class="skills-label">语言：</span>
+                <span class="skills-content">JavaScript (ES6+) / TypeScript，熟悉常用数据结构与算法</span>
+            </div>
+            <div class="skills-group">
+                <span class="skills-label">框架：</span>
+                <span class="skills-content">Vue 3 (Composition API) / React 18 / Next.js，理解响应式原理与虚拟 DOM 机制</span>
+            </div>
+            <div class="skills-group">
+                <span class="skills-label">工程：</span>
+                <span class="skills-content">Node.js / Webpack / Vite / Git / CI/CD，具备独立项目工程化能力</span>
+            </div>
+        </section>
+
+        <!-- Campus -->
+        <section class="section">
+            <div class="section-head">
+                <span class="section-title">校园经历</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="entry">
+                <div class="entry-header">
+                    <div>
+                        <span class="entry-org">计算机学院学生会</span>
+                        <span class="entry-role">技术部部长</span>
+                    </div>
+                    <span class="entry-date">2021.09 - 2023.06</span>
+                </div>
+                <ul class="bullet-list">
+                    <li>带领 8 人技术团队，负责学院官网改版与迎新系统开发，服务师生 2000 余人</li>
+                    <li>组织 3 场前端技术分享会与 2 次 Hackathon 活动，参与人数累计 300+</li>
+                    <li>搭建学院技术博客平台，推动同学技术输出与交流，月均产出文章 20+ 篇</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Honors -->
+        <section class="section">
+            <div class="section-head">
+                <span class="section-title">荣誉奖项</span>
+                <div class="section-rule"></div>
+            </div>
+            <div class="honor-item">
+                <span class="honor-name">国家奖学金（本科学业最高荣誉，年级仅 2 人）</span>
+                <span class="honor-time">2022.10</span>
+            </div>
+            <div class="honor-item">
+                <span class="honor-name">蓝桥杯全国软件和信息技术专业人才大赛 省赛一等奖</span>
+                <span class="honor-time">2022.04</span>
+            </div>
+            <div class="honor-item">
+                <span class="honor-name">北京大学三好学生</span>
+                <span class="honor-time">2021.12</span>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="resume-footer">
+            以上为访谈式简历生成器校招案例 &mdash; 经典传统模板
+        </div>
+
+    </article>
+
+</body>
+</html>
