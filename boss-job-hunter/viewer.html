@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>职位管理 - Boss直聘猎手</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f5f5f5; color: #333; }
+.header { background: #fff; padding: 16px 24px; border-bottom: 1px solid #e8e8e8; position: sticky; top: 0; z-index: 100; }
+.header h1 { font-size: 20px; font-weight: 600; }
+.header .stats { display: flex; gap: 16px; margin-top: 8px; font-size: 13px; color: #666; }
+.header .stats span { background: #f0f0f0; padding: 2px 10px; border-radius: 12px; }
+.toolbar { display: flex; gap: 12px; padding: 12px 24px; background: #fff; border-bottom: 1px solid #e8e8e8; flex-wrap: wrap; align-items: center; }
+.toolbar input, .toolbar select { padding: 6px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; outline: none; }
+.toolbar input:focus, .toolbar select:focus { border-color: #1890ff; }
+.toolbar input { width: 200px; }
+.table-wrap { padding: 16px 24px; }
+table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+th { background: #fafafa; padding: 10px 12px; font-size: 12px; font-weight: 600; text-align: left; color: #666; border-bottom: 1px solid #eee; white-space: nowrap; }
+td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+tr:hover td { background: #fafbff; }
+.score { display: inline-block; width: 28px; height: 28px; line-height: 28px; text-align: center; border-radius: 6px; font-weight: 700; font-size: 13px; color: #fff; }
+.score-5 { background: #52c41a; }
+.score-4 { background: #1890ff; }
+.score-3 { background: #faad14; color: #333; }
+.score-2 { background: #ff7a45; }
+.score-1 { background: #999; }
+.title-cell { max-width: 260px; }
+.title-cell a { color: #1890ff; text-decoration: none; font-weight: 500; }
+.title-cell a:hover { text-decoration: underline; }
+.company { color: #333; font-weight: 500; }
+.salary { color: #f50; font-weight: 600; white-space: nowrap; }
+.tag { display: inline-block; background: #f0f0f0; padding: 1px 6px; border-radius: 3px; font-size: 11px; margin: 1px; color: #666; }
+.status-select { padding: 4px 8px; border: 1px solid #ddd; border-radius: 4px; font-size: 12px; cursor: pointer; outline: none; background: #fff; }
+.status-select:focus { border-color: #1890ff; }
+.notes-input { width: 100%; min-width: 100px; padding: 4px 8px; border: 1px solid transparent; border-radius: 4px; font-size: 12px; outline: none; background: transparent; }
+.notes-input:hover { background: #fafafa; border-color: #e8e8e8; }
+.notes-input:focus { background: #fff; border-color: #1890ff; }
+.empty { text-align: center; padding: 60px 20px; color: #999; font-size: 15px; }
+.footer { text-align: center; padding: 20px; color: #999; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Boss直聘职位管理</h1>
+  <div class="stats" id="stats"></div>
+</div>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="搜索职位/公司/备注..." />
+  <select id="filterScore"><option value="">全部分数</option><option value="5">5分</option><option value="4">4分</option><option value="3">3分</option><option value="2">2分</option><option value="1">1分</option></select>
+  <select id="filterCity"><option value="">全部城市</option><option value="广州">广州</option><option value="深圳">深圳</option></select>
+  <select id="filterStatus"><option value="">全部状态</option><option value="新发现">新发现</option><option value="已打招呼">已打招呼</option><option value="已投递">已投递</option><option value="面试中">面试中</option><option value="已拒绝">已拒绝</option><option value="不合适">不合适</option></select>
+  <select id="sortBy"><option value="score">按分数排序</option><option value="date">按时间排序</option><option value="salary">按薪资排序</option></select>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>推荐</th>
+        <th>职位名称</th>
+        <th>公司</th>
+        <th>薪资</th>
+        <th>城市</th>
+        <th>经验</th>
+        <th>状态</th>
+        <th>备注</th>
+        <th>发现时间</th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+  <div class="empty" id="empty" style="display:none">没有匹配的职位</div>
+</div>
+
+<div class="footer">Boss直聘猎手 &middot; 数据存储在 jobs.json</div>
+
+<script>
+let allJobs = [];
+
+async function load() {
+  try {
+    const res = await fetch('/api/jobs');
+    const data = await res.json();
+    allJobs = data.jobs || [];
+  } catch(e) {
+    document.getElementById('empty').style.display = 'block';
+    document.getElementById('empty').textContent = '加载失败，请确认服务已启动（node process-and-save.mjs --serve）';
+    return;
+  }
+  render();
+}
+
+function getFiltered() {
+  const search = document.getElementById('search').value.toLowerCase();
+  const score = document.getElementById('filterScore').value;
+  const city = document.getElementById('filterCity').value;
+  const status = document.getElementById('filterStatus').value;
+  const sort = document.getElementById('sortBy').value;
+
+  let list = allJobs.filter(j => {
+    if (score && j.score !== Number(score)) return false;
+    if (city && j.city !== city) return false;
+    if (status && j.status !== status) return false;
+    if (search) {
+      const s = search;
+      return (j.title||'').toLowerCase().includes(s) || (j.company||'').toLowerCase().includes(s) || (j.notes||'').toLowerCase().includes(s) || (j.area||'').toLowerCase().includes(s);
+    }
+    return true;
+  });
+
+  if (sort === 'score') list.sort((a,b) => b.score - a.score);
+  else if (sort === 'date') list.sort((a,b) => (b.firstSeen||'').localeCompare(a.firstSeen||''));
+  else if (sort === 'salary') list.sort((a,b) => parseSalary(b.salary) - parseSalary(a.salary));
+
+  return list;
+}
+
+function parseSalary(s) {
+  if (!s) return 0;
+  const m = s.match(/(\d+)/);
+  return m ? Number(m[1]) : 0;
+}
+
+function render() {
+  const list = getFiltered();
+  const tbody = document.getElementById('tbody');
+  const empty = document.getElementById('empty');
+
+  // stats
+  const total = allJobs.length;
+  const gz = allJobs.filter(j => j.city === '广州').length;
+  const sz = allJobs.filter(j => j.city === '深圳').length;
+  const sc = {};
+  const st = {};
+  allJobs.forEach(j => { sc[j.score] = (sc[j.score]||0)+1; st[j.status] = (st[j.status]||0)+1; });
+  document.getElementById('stats').innerHTML =
+    `<span>共 ${total} 个</span><span>广州 ${gz}</span><span>深圳 ${sz}</span>` +
+    Object.entries(sc).sort((a,b)=>b[0]-a[0]).map(([s,n]) => `<span>${s}分 ${n}</span>`).join('') +
+    Object.entries(st).map(([s,n]) => `<span>${s} ${n}</span>`).join('');
+
+  if (list.length === 0) {
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = list.map(j => {
+    const date = j.firstSeen ? j.firstSeen.split('T')[0] : '-';
+    return `<tr data-id="${j.id}">
+      <td><span class="score score-${j.score}">${j.score}</span></td>
+      <td class="title-cell"><a href="${j.url}" target="_blank">${esc(j.title)}</a></td>
+      <td class="company">${esc(j.company)}</td>
+      <td class="salary">${esc(j.salary)}</td>
+      <td>${j.city||''}</td>
+      <td>${j.exp||''}</td>
+      <td><select class="status-select" onchange="updateStatus('${j.id}',this.value)">
+        ${['新发现','已打招呼','已投递','面试中','已拒绝','不合适'].map(s => `<option value="${s}" ${j.status===s?'selected':''}>${s}</option>`).join('')}
+      </select></td>
+      <td><input class="notes-input" value="${esc(j.notes||'')}" placeholder="点击添加备注" onchange="updateNotes('${j.id}',this.value)" /></td>
+      <td style="white-space:nowrap;color:#999;font-size:12px">${date}</td>
+    </tr>`;
+  }).join('');
+}
+
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+async function updateStatus(id, status) {
+  await fetch(`/api/jobs/${id}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ status }) });
+  const job = allJobs.find(j => j.id === id);
+  if (job) job.status = status;
+  render();
+}
+
+async function updateNotes(id, notes) {
+  await fetch(`/api/jobs/${id}`, { method: 'PUT', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ notes }) });
+  const job = allJobs.find(j => j.id === id);
+  if (job) job.notes = notes;
+}
+
+document.getElementById('search').addEventListener('input', render);
+document.getElementById('filterScore').addEventListener('change', render);
+document.getElementById('filterCity').addEventListener('change', render);
+document.getElementById('filterStatus').addEventListener('change', render);
+document.getElementById('sortBy').addEventListener('change', render);
+
+load();
+</script>
+</body>
+</html>
