@@ -11,6 +11,7 @@ Claude Code 个人技能库，收集自建的工具类 Skill。
 | [bencao-remedy](bencao-remedy/) | 本草纲目健康顾问，根据症状推荐中医药和食疗方案 | 复制到 `~/.claude/skills/bencao-remedy/` |
 | [sunzi-strategy](sunzi-strategy/) | 孙子兵法与三十六计谋略顾问，适用于商业竞争、职场、谈判等场景 | 复制到 `~/.claude/skills/sunzi-strategy/` |
 | [interview-resume-generator](interview-resume-generator/) | 访谈式简历生成器，通过智能问答引导生成专业简历 | 复制到 `~/.claude/skills/interview-resume-generator/` |
+| [boss-job-hunter](boss-job-hunter/) | Boss直聘自动化求职工具，批量提取JD、智能匹配、数据可视化 | 复制到 `~/.claude/skills/boss-job-hunter/` |
 | [deploying-to-production](deploying-to-production/) | 一键部署 Next.js 项目到 Vercel，自动创建 GitHub 仓库和 CI/CD | 复制到 `~/.claude/skills/deploying-to-production/` |
 
 ## 安装方法
