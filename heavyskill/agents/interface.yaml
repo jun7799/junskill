@@ -1,0 +1,20 @@
+interface:
+  display_name: "Deliberate"
+  short_description: "Parallel reasoning traces + Claude Agent deliberation synthesis"
+  default_prompt: "Use heavyskill to think harder about this question by generating independent reasoning traces and synthesizing across them via Claude Agent."
+compatibility:
+  canonical_format: "agent-skills"
+  adapter_targets:
+    - "claude"
+  activation:
+    mode: "manual"
+    paths: []
+  execution:
+    context: "inline"
+    shell: "none"
+  trust:
+    source_tier: "local"
+    remote_inline_execution: "forbid"
+    remote_metadata_policy: "allow-metadata-only"
+  degradation:
+    claude: "neutral-source-plus-adapter"
